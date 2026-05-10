@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Mudaber مُدبَّر</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:linear-gradient(135deg,#0a0a0a,#111827,#0a1628)}
+body{display:flex;align-items:center;justify-content:center;padding:20px;font-family:'DM Sans',sans-serif;min-height:100vh}
+.wrap{display:flex;align-items:center;gap:24px;position:relative}
+.phone{width:390px;height:820px;background:#111;border-radius:50px;border:2px solid #2a2a2a;box-shadow:0 0 0 1px #333,0 40px 80px rgba(0,0,0,.8);overflow:hidden;display:flex;flex-direction:column}
+.header{background:#1a3a2e;padding:12px 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #2a4a3a;flex-shrink:0}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#c8a96e,#e8c87e);display:flex;align-items:center;justify-content:center;font-family:'Tajawal',sans-serif;font-weight:800;font-size:17px;color:#1a1a0a;flex-shrink:0}
+.hname{font-family:'Tajawal',sans-serif;font-weight:700;font-size:16px;color:#fff}
+.hsub{font-size:12px;color:#4ade80;font-weight:500}
+/* Start screen */
+.start{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;text-align:center;gap:16px;background:#0d1117}
+.logo{width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,#c8a96e,#a87c40);display:flex;align-items:center;justify-content:center;font-family:'Tajawal',sans-serif;font-weight:800;font-size:28px;color:#1a1000;box-shadow:0 12px 40px rgba(200,169,110,.3)}
+.brand{font-family:'Tajawal',sans-serif;font-weight:800;font-size:26px;color:#fff}
+.brand-ar{font-family:'Tajawal',sans-serif;font-size:15px;color:#c8a96e;font-weight:700;margin-top:4px}
+.desc{font-size:13px;color:#6a8090;line-height:1.6}
+.tags{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.tag{background:rgba(200,169,110,.08);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:5px 11px;border-radius:20px;font-size:11.5px;font-family:'Tajawal',sans-serif}
+.start-btn{background:linear-gradient(135deg,#c8a96e,#a87c40);color:#1a1000;border:none;padding:13px 34px;border-radius:30px;font-size:15px;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;box-shadow:0 8px 24px rgba(200,169,110,.35);transition:transform .15s}
+.start-btn:hover{transform:translateY(-2px)}
+.demo-note{font-size:11px;color:#4a6070;font-family:'DM Sans',sans-serif;border:1px solid #2a3a4a;padding:5px 12px;border-radius:20px}
+/* Chat */
+.chat-wrap{display:none;flex:1;flex-direction:column;overflow:hidden}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px;background:#0d1117;display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:#2a3a4a;border-radius:10px}
+.datechip{text-align:center;margin:6px 0}
+.datechip span{background:rgba(255,255,255,.06);color:#8899aa;font-size:11px;padding:3px 10px;border-radius:20px}
+.bubble{max-width:83%;padding:10px 13px;border-radius:18px;font-size:13.5px;line-height:1.58;white-space:pre-wrap;word-break:break-word;animation:bi .22s ease}
+@keyframes bi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.bubble.bot{background:linear-gradient(135deg,#1e3a2e,#1a3028);color:#e8f5ee;border-top-left-radius:4px;align-self:flex-start;border:1px solid #2a4a3a}
+.bubble.user{background:linear-gradient(135deg,#c8a96e,#b8954a);color:#1a1000;border-top-right-radius:4px;align-self:flex-end;font-weight:500}
+.bubble.ar-txt{font-family:'Tajawal',sans-serif;direction:rtl;text-align:right}
+.typing{display:flex;align-items:center;gap:4px;padding:12px 16px;background:linear-gradient(135deg,#1e3a2e,#1a3028);border-radius:18px;border-top-left-radius:4px;align-self:flex-start;border:1px solid #2a4a3a}
+.typing span{width:7px;height:7px;background:#4ade80;border-radius:50%;animation:dt 1.3s infinite;opacity:.7}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes dt{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1.1);opacity:1}}
+.qr-row{display:flex;gap:7px;flex-wrap:wrap;padding:7px 12px 2px;flex-shrink:0}
+.qr-btn{background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.4);color:#c8a96e;padding:6px 13px;border-radius:20px;font-size:13px;font-family:'Tajawal',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
+.qr-btn:hover{background:rgba(200,169,110,.25)}
+.inp-row{padding:9px 12px 18px;background:#0d1117;display:flex;gap:8px;align-items:flex-end;border-top:1px solid #1a2530;flex-shrink:0}
+#msgInput{flex:1;background:#1a2530;border:1px solid #2a3a4a;border-radius:22px;padding:10px 15px;color:#e8f0f8;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;min-height:42px;max-height:100px;line-height:1.4}
+#msgInput::placeholder{color:#4a6070}
+#msgInput:focus{border-color:#3a5a4a}
+#sendBtn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#c8a96e,#a87c40);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s,opacity .15s}
+#sendBtn:hover{transform:scale(1.08)}
+#sendBtn:disabled{opacity:.4;cursor:not-allowed}
+/* Sidebar */
+.sidebar{width:255px;display:flex;flex-direction:column;gap:13px}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px 16px}
+.card-title{font-family:'Tajawal',sans-serif;font-weight:700;font-size:12px;color:#c8a96e;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.row{display:flex;justify-content:space-between;font-size:12px;color:#8899aa;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.row:last-child{border-bottom:none}.row span:last-child{color:#e8f0f8;font-weight:600}
+.demo-badge{font-size:11px;color:#4a6070;border:1px solid #2a3a4a;padding:5px 12px;border-radius:20px;text-align:center}
+@media(max-width:720px){.sidebar{display:none}}
+@media(max-width:430px){body{padding:0}.phone{width:100vw;height:100vh;border-radius:0;border:none;box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phone">
+    <div class="header">
+      <div class="av">م</div>
+      <div style="flex:1">
+        <div class="hname">Mudaber مُدبَّر</div>
+        <div class="hsub" id="statusTxt">● Online — 7AM to 2AM</div>
+      </div>
+      <span style="font-size:20px">📞</span>
+    </div>
+
+    <!-- Start Screen -->
+    <div class="start" id="startScreen">
+      <div class="logo">م</div>
+      <div>
+        <div class="brand">Mudaber</div>
+        <div class="brand-ar">مُدبَّر — اللي يدبّر أمورك</div>
+      </div>
+      <div class="desc">أول خدمة توصيل ذكية في أبوظبي والعين<br/>Buy anything · Deliver anything · Queue for you</div>
+      <div class="tags">
+        <span class="tag">🛍️ أي محل</span>
+        <span class="tag">🏛️ طوابير</span>
+        <span class="tag">🌙 حتى ٢ فجر</span>
+        <span class="tag">🇦🇪 عربي & English</span>
+      </div>
+      <button class="start-btn" onclick="startChat()">ابدأ / Start Chat →</button>
+      <div class="demo-note">🧪 Demo only — not a real order</div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div class="chat-wrap" id="chatScreen">
+      <div class="msgs" id="msgs">
+        <div class="datechip"><span id="dateLabel"></span></div>
+      </div>
+      <div class="qr-row" id="qrRow"></div>
+      <div class="inp-row">
+        <textarea id="msgInput" placeholder="اكتب / Type a message..." rows="1" oninput="resizeInput(this)" onkeydown="handleKey(event)"></textarea>
+        <button id="sendBtn" onclick="send()" disabled>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <path d="M22 2L11 13" stroke="#1a1000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#1a1000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="card">
+      <div class="card-title">🚗 Delivery Pricing</div>
+      <div class="row"><span>Base fee (0–3 km)</span><span>AED 12</span></div>
+      <div class="row"><span>Per km after 3km</span><span>AED 2/km</span></div>
+      <div class="row"><span>Errand service fee</span><span>AED 7</span></div>
+      <div class="row"><span>Max cap</span><span>AED 60</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏛️ Queue / Waiting</div>
+      <div class="row"><span>Show-up fee</span><span>AED 25</span></div>
+      <div class="row"><span>Per hour waiting</span><span>AED 30/hr</span></div>
+      <div class="row"><span>1 hr example</span><span>AED 55</span></div>
+      <div class="row"><span>2 hrs example</span><span>AED 85</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⏰ Operations</div>
+      <div class="row"><span>Hours</span><span>7AM – 2AM</span></div>
+      <div class="row"><span>Cities</span><span>AD + Al Ain</span></div>
+      <div class="row"><span>Payment</span><span>Card / Apple Pay</span></div>
+      <div class="row"><span>Languages</span><span>AR + EN</span></div>
+    </div>
+    <div class="demo-badge">🧪 Demo — not a real service yet</div>
+  </div>
+</div>
+
+<script>
+const CFG={baseFee:12,perKm:2,svcFee:7,timeBase:25,timePerHr:30,maxDel:60};
+const DRIVERS=[{name:"Ahmed",phone:"+971 50 123 4567",eta:12},{name:"Mohammed",phone:"+971 55 987 6543",eta:18},{name:"Rajan",phone:"+971 52 456 7890",eta:9}];
+const S={TASK:"task",STORE:"store",PICKUP:"pickup",DELIVERY:"delivery",DURATION:"duration",INSTRUCTIONS:"instr",ESTIMATE:"est",PAYMENT:"pay",CONFIRMED:"done",CLOSED:"closed"};
+const LOCS=["galleria mall","galleria","marina mall","yas mall","dalma mall","mushrif mall","khalidiyah mall","mazyad mall","al ain mall","bawabat al sharq","world trade center","khalidiyah","corniche","mussafah","mbz city","mohammed bin zayed city","khalifa city","al raha","al reef","saadiyat","yas island","al bateen","al muwaiji","hili","jimi","zakher","al ain city center","lulu hypermarket","lulu","carrefour","spinneys","waitrose","ikea","city center","city centre","downtown abu dhabi","al zahiyah","hamdan street","abu dhabi mall","al wahda mall","al ain","abu dhabi","tasheel","amer center","dnrd","municipality","\u0627\u0644\u063a\u0627\u0644\u064a\u0631\u064a\u0627","\u062c\u0627\u0644\u064a\u0631\u064a\u0627","\u0645\u0627\u0631\u064a\u0646\u0627 \u0645\u0648\u0644","\u064a\u0627\u0633 \u0645\u0648\u0644","\u062f\u0644\u0645\u0627 \u0645\u0648\u0644","\u0645\u0634\u0631\u0641 \u0645\u0648\u0644","\u0627\u0644\u062e\u0627\u0644\u062f\u064a\u0629 \u0645\u0648\u0644","\u0644\u0648\u0644\u0648","\u0643\u0627\u0631\u0641\u0648\u0631","\u0623\u0628\u0648\u0638\u0628\u064a","\u0627\u0628\u0648\u0638\u0628\u064a","\u0623\u0628\u0648 \u0638\u0628\u064a","\u0627\u0644\u0639\u064a\u0646","\u0627\u0644\u0645\u0635\u0641\u062d","\u062e\u0644\u064a\u0641\u0629 \u0633\u064a\u062a\u064a","\u0627\u0644\u0643\u0648\u0631\u0646\u064a\u0634","\u062a\u0633\u0647\u064a\u0644","\u0645\u0631\u0643\u0632 \u0623\u0645\u0631","\u0627\u0644\u062c\u0648\u0627\u0632\u0627\u062a","\u0628\u0644\u062f\u064a\u0629"];
+
+let stage=S.TASK, order={}, lang="en", busy=false;
+
+function isAr(t){return(t.match(/[\u0600-\u06FF]/g)||[]).length>t.length*0.2;}
+function setLang(t){lang=isAr(t)?"ar":"en";}
+function isOpen(){const h=new Date().getHours();return h>=7||h<2;}
+function taskType(t){
+  if(/queue|line|stand in|waiting|wait in|government|embassy|tasheel|amer|municipalit|dnrd|police|court|immigration|visa renewal|\u0637\u0627\u0628\u0648\u0631|\u0627\u0646\u062a\u0638\u0627\u0631|\u062d\u0643\u0648\u0645\u064a|\u0633\u0641\u0627\u0631\u0629|\u062a\u0633\u0647\u064a\u0644|\u0648\u0642\u0648\u0641|\u0627\u0646\u062a\u0638\u0631/i.test(t))return"time";
+  if(/buy|get|pick|purchase|bring|groceries|medicine|pharmacy|food|mall|order|\u0634\u0631\u0627\u0621|\u062c\u064a\u0628|\u0623\u062d\u0636\u0631|\u0627\u0634\u062a\u0631\u064a|\u0623\u0631\u064a\u062f|\u0627\u0628\u063a\u0649|\u0628\u063a\u064a\u062a|\u0623\u0628\u064a/i.test(t))return"errand";
+  return"delivery";
+}
+function getLoc(t){
+  const l=t.toLowerCase();
+  const s=[...LOCS].sort((a,b)=>b.length-a.length);
+  for(const loc of s)if(l.includes(loc))return loc.replace(/\b\w/g,c=>c.toUpperCase());
+  return null;
+}
+function calcDel(km,type){
+  const d=km<=3?CFG.baseFee:CFG.baseFee+(km-3)*CFG.perKm;
+  const del=Math.min(d,CFG.maxDel);
+  const svc=type==="errand"?CFG.svcFee:0;
+  return{delivery:del,service:svc,total:del+svc,km};
+}
+function calcTime(h){return{base:CFG.timeBase,perHr:CFG.timePerHr,hours:h,total:CFG.timeBase+h*CFG.timePerHr};}
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+// ── Responses ──
+function R(ar,en){return lang==="ar"?ar:en;}
+function bold(t){return t.replace(/\*(.*?)\*/g,"<strong>$1</strong>").replace(/_(.*?)_/g,"<em>$1</em>").replace(/\n/g,"<br/>");}
+
+// ── DOM ──
+function addBubble(text,from){
+  const msgs=document.getElementById("msgs");
+  const d=document.createElement("div");
+  d.className="bubble "+from+(from==="user"&&isAr(text)?" ar-txt":"");
+  d.innerHTML=bold(text);
+  msgs.appendChild(d);
+  msgs.scrollTop=msgs.scrollHeight;
+  return d;
+}
+function showTyping(){
+  const msgs=document.getElementById("msgs");
+  const d=document.createElement("div");
+  d.className="typing";d.id="typing";
+  d.innerHTML="<span></span><span></span><span></span>";
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function hideTyping(){const t=document.getElementById("typing");if(t)t.remove();}
+
+function botSay(text,delay){
+  return new Promise(res=>{
+    showTyping();
+    setTimeout(()=>{hideTyping();addBubble(text,"bot");res();},delay||800);
+  });
+}
+
+function setQR(btns){
+  const row=document.getElementById("qrRow");
+  row.innerHTML="";
+  if(!btns||!btns.length)return;
+  btns.forEach(b=>{
+    const btn=document.createElement("button");
+    btn.className="qr-btn";btn.textContent=b;
+    btn.onclick=()=>{document.getElementById("msgInput").value=b.replace("✓","").trim();updateBtn();send();};
+    row.appendChild(btn);
+  });
+}
+
+function updateBtn(){
+  const v=document.getElementById("msgInput").value.trim();
+  document.getElementById("sendBtn").disabled=!v||busy;
+}
+
+function resizeInput(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,100)+"px";updateBtn();}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}
+
+// ── Init ──
+document.getElementById("dateLabel").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"short"});
+document.getElementById("msgInput").addEventListener("input",updateBtn);
+if(!isOpen())document.getElementById("statusTxt").textContent="● Closed · Opens 7AM";
+
+async function startChat(){
+  document.getElementById("startScreen").style.display="none";
+  document.getElementById("chatScreen").style.display="flex";
+  busy=true;
+  if(!isOpen()){
+    stage=S.CLOSED;
+    await botSay("مرحباً بك في *مُدبَّر* 🌙\n\nWe're currently closed. Mudaber operates daily *7:00 AM – 2:00 AM*.\n\nMessage us then and we'll get it done! 😊",900);
+    busy=false;return;
+  }
+  await botSay("مرحباً! Welcome to *Mudaber* 🚗✨\n\nأهلاً وسهلاً!\n\nI'm your personal assistant — أنا مساعدك الشخصي في *أبوظبي والعين*.\n\n🛍️ Buy anything — أشتري لك من أي محل\n📦 Deliver anything — أوصّل أي شيء\n🏛️ Queue for you — أوقف الطابور عنك\n🍔 Food from anywhere — أكل من أي مطعم\n\nرد بالعربي أو الإنجليزي 🇦🇪\n\nWhat do you need? / شو تبي؟ 👇",900);
+  busy=false;
+}
+
+async function send(){
+  const inp=document.getElementById("msgInput");
+  const text=inp.value.trim();
+  if(!text||busy)return;
+  inp.value="";inp.style.height="auto";updateBtn();
+  setLang(text);
+  addBubble(text,"user");
+  setQR([]);busy=true;
+
+  if(stage===S.TASK){
+    const type=taskType(text);
+    const loc=getLoc(text);
+    const hasFrom=/from|at|in|\u0645\u0646|\u0641\u064a|\u0639\u0646\u062f|\u0628/i.test(text);
+    order={task:text,taskType:type};
+    if(type==="time"){
+      order.location=loc;
+      if(loc){await botSay(R(`تمام! 🏛️ بروح *${loc}* وأوقف في الطابور عنك.\n\nكم تتوقع وقت الانتظار؟\n\n("ساعة"، "ساعتين"، أو "مو عارف")`,`Got it! 🏛️ I'll head to *${loc}* and queue for you.\n\nHow long do you expect the wait?\n\n("1 hour", "2 hours", or "not sure")`));setQR(R(["ساعة","ساعتين","مو عارف"],["1 hour","2 hours","Not sure"]));stage=S.DURATION;}
+      else{await botSay(R("تمام! بوقف في الطابور عنك. 🏛️\n\nأي مكتب أو جهة تبيني أروح؟","Got it! I'll stand in line for you. 🏛️\n\nWhich office or place should I go to?"));stage=S.STORE;}
+    }else{
+      if(loc&&hasFrom){order.store=loc;order.pickupArea=loc;await botSay(R(`تمام! 👍 بروح على *${loc}*.\n\nوين تبي توصيلتك؟`,`Got it! 👍 I'll head to *${loc}*.\n\nWhat's your *delivery address*?`));stage=S.DELIVERY;}
+      else{await botSay(R("تمام! 👍\n\nمن أي محل أو مكان؟\n\n(مثل: لولو، كارفور، جاليريا مول، أي صيدلية)","Got it! 👍\n\nWhich store should I go to?\n\n(e.g. Lulu, Carrefour, Galleria Mall, any pharmacy)"));stage=S.STORE;}
+    }
+
+  }else if(stage===S.STORE){
+    const loc=getLoc(text);
+    const vague=/^(pharmacy|pharmacies|supermarket|restaurant|shop|store|\u0645\u062d\u0644|\u062f\u0643\u0627\u0646|\u0635\u064a\u062f\u0644\u064a\u0629|\u0645\u0637\u0639\u0645|\u0633\u0648\u0628\u0631 \u0645\u0627\u0631\u0643\u062a)$/i.test(text.trim());
+    if(order.taskType==="time"){
+      order.store=text;order.pickupArea=loc||text;
+      await botSay(R(`تمام — *${text}*. 🏛️\n\nكم تتوقع وقت الانتظار؟\n\n("ساعة"، "ساعتين"، أو "مو عارف")`,`Got it — *${text}*. 🏛️\n\nHow long do you expect the wait?\n\n("1 hour", "2 hours", "not sure")`));
+      setQR(R(["ساعة","ساعتين","مو عارف"],["1 hour","2 hours","Not sure"]));stage=S.DURATION;
+    }else if(vague){
+      order.store=text;
+      await botSay(R(`تمام — *${text}*! 🏪\n\nفي أي منطقة؟`,`Perfect — *${text}*! 🏪\n\nWhich area is this store in?`));stage=S.PICKUP;
+    }else{
+      order.store=text;order.pickupArea=loc||text;
+      await botSay(R(`تمام — *${text}*! 🏪\n\nوين تبي توصيلتك؟\n\n(الحي، الشارع، اسم البناية)`,`Perfect — *${text}*! 🏪\n\nWhat's your *delivery address*?\n\n(Area, street, building)`));stage=S.DELIVERY;
+    }
+
+  }else if(stage===S.PICKUP){
+    order.pickupArea=text;
+    await botSay(R("تمام! 📍\n\nوين تبي توصيلتك؟\n\n(الحي، الشارع، اسم البناية)","Got it! 📍\n\nWhat's your *delivery address*?\n\n(Area, street, building)"));stage=S.DELIVERY;
+
+  }else if(stage===S.DURATION){
+    const m=text.match(/(\d+(\.\d+)?)/);
+    const hrs=m?parseFloat(m[1]):1.5;
+    order.pricing=calcTime(hrs);order.duration=hrs;
+    await botSay(R("تمام! ⏱️\n\nوين أجيك بعد ما أخلص؟\n\n(أو قول 'مو محتاج ترجع')","Got it! ⏱️\n\nWhat's your *address*? I'll come to you after.\n\n(Or say 'no return needed')"));stage=S.DELIVERY;
+
+  }else if(stage===S.DELIVERY){
+    order.deliveryArea=text;
+    if(order.taskType==="time"){
+      const p=order.pricing||calcTime(1.5);
+      await botSay(R(
+        `هذا ملخص طلبك 🧾\n\n🏛️ *الطلب:* ${order.task}\n📍 *المكان:* ${order.store||order.location}\n⏱️ *وقت الانتظار:* ~${p.hours} ساعة\n🏠 *الرجوع إلى:* ${text}\n\n💰 *التكلفة التقريبية:*\n   رسوم الحضور: ${p.base} درهم\n   الانتظار: ${p.perHr} × ${p.hours} = ${p.perHr*p.hours} درهم\n   ─────────\n   *الإجمالي: ${p.total} درهم*\n\nالدفع عبر *البطاقة* 💳\n\nتأكد؟ رد *نعم* أو *لا*.`,
+        `Here's your *summary* 🧾\n\n🏛️ *Task:* ${order.task}\n📍 *Location:* ${order.store||order.location}\n⏱️ *Est. wait:* ~${p.hours} hour(s)\n🏠 *Return to:* ${text}\n\n💰 *Price Estimate:*\n   Show-up fee: AED ${p.base}\n   Waiting: AED ${p.perHr}/hr × ${p.hours}hr = AED ${p.perHr*p.hours}\n   ─────────\n   *Total: AED ${p.total}*\n\nPayment via *card* 💳\n\nConfirm? Reply *Yes* or *No*.`
+      ));setQR(R(["نعم","لا"],["Yes","No"]));stage=S.ESTIMATE;
+    }else{
+      await botSay(R("تقريباً خلصنا! 📝\n\nفي أي تعليمات خاصة؟\n(مقاس، لون، كمية، ميزانية، رمز الدخول)\n\nأو رد *لا* للتخطي.","Almost there! 📝\n\nAny special instructions?\n(size, color, quantity, budget, building code)\n\nOr reply *No* to skip."));
+      setQR(R(["لا"],["No"]));stage=S.INSTRUCTIONS;
+    }
+
+  }else if(stage===S.INSTRUCTIONS){
+    const noW=/^(no|لا|لأ)$/i.test(text);
+    const inst=noW?(lang==="ar"?"لا يوجد":"None"):text;
+    const km=rnd(4,15);
+    const p=calcDel(km,order.taskType);
+    order.pricing=p;order.instructions=inst;
+    await botSay(R(
+      `هذا ملخص طلبك 🧾\n\n🛍️ *الطلب:* ${order.task}\n🏪 *من:* ${order.store||order.pickupArea}\n📍 *الاستلام:* ${order.pickupArea}\n🏠 *التوصيل:* ${order.deliveryArea}\n📏 *المسافة:* ~${km} كم\n📝 *تعليمات:* ${inst}\n\n💰 *التكلفة:*\n   رسوم التوصيل: ${p.delivery} درهم\n${p.service>0?`   رسوم الخدمة: ${p.service} درهم\n`:""
+      }   ─────────\n   *الإجمالي: ${p.total} درهم*\n\nالدفع عبر *البطاقة* 💳\n\nتأكد الطلب؟ رد *نعم* أو *لا*.`,
+      `Here's your *order summary* 🧾\n\n🛍️ *Task:* ${order.task}\n🏪 *From:* ${order.store||order.pickupArea}\n📍 *Pickup:* ${order.pickupArea}\n🏠 *Deliver to:* ${order.deliveryArea}\n📏 *Distance:* ~${km} km\n📝 *Instructions:* ${inst}\n\n💰 *Price Estimate:*\n   Delivery fee: AED ${p.delivery}\n${p.service>0?`   Service fee: AED ${p.service}\n`:""
+      }   ─────────\n   *Total: AED ${p.total}*\n\nPayment via *card* 💳\n\nConfirm? Reply *Yes* or *No*.`
+    ));setQR(R(["نعم","لا"],["Yes","No"]));stage=S.ESTIMATE;
+
+  }else if(stage===S.ESTIMATE){
+    if(/yes|نعم|أيوه|aywa|ok|okay|confirm|ايوه|اوك/i.test(text)){
+      await botSay(R("✅ *تم تأكيد طلبك!*\n\nجاري إرسال رابط الدفع...","✅ *Order confirmed!*\n\nSending your payment link..."),900);
+      const id=rnd(10000,99999);
+      await botSay(R(
+        `💳 *رابط الدفع:*\nhttps://pay.telr.com/mudaber/order-${id}\n\n_صالح 10 دقائق. ادفع بـ Visa أو Mastercard أو Apple Pay._`,
+        `💳 *Payment Link:*\nhttps://pay.telr.com/mudaber/order-${id}\n\n_Valid 10 minutes. Pay with Visa, Mastercard or Apple Pay._`
+      ),1200);setQR(R(["تم الدفع ✓"],["Paid ✓"]));stage=S.PAYMENT;
+    }else{
+      await botSay(R("لا بأس! تم إلغاء الطلب. 😊\n\nفي شي ثاني أقدر أساعدك فيه؟","No problem! Order cancelled. 😊\n\nAnything else I can help with?"));
+      order={};stage=S.TASK;
+    }
+
+  }else if(stage===S.PAYMENT){
+    if(/paid|done|pay|yes|نعم|دفعت|تم|confirmed|ok|اوك/i.test(text)){
+      const drv=DRIVERS[rnd(0,2)];order.driver=drv;
+      await botSay(R("🎉 *تم استلام الدفع! شكراً.*\n\nجاري تعيين سائقك...","🎉 *Payment received!*\n\nAssigning your driver..."),700);
+      await botSay(R(
+        `🚗 *سائقك:*\n\n👤 *${drv.name}*\n📞 ${drv.phone}\n⏱️ وقت الوصول: *~${drv.eta} دقيقة*\n\nتقدر تتواصل معه مباشرة.\n\nبنبهك على كل تحديث! 📲`,
+        `🚗 *Your Driver:*\n\n👤 *${drv.name}*\n📞 ${drv.phone}\n⏱️ ETA: *~${drv.eta} minutes*\n\nYou can contact your driver directly.\n\nWe'll keep you updated! 📲`
+      ),1000);stage=S.CONFIRMED;
+      const isTime=order.taskType==="time";
+      const place=order.store||order.location||order.pickupArea;
+      const msgs=document.getElementById("msgs");
+      setTimeout(()=>{
+        addBubble(isTime?R(`🏛️ *تحديث:* ${drv.name} وصل إلى ${place} ووقف في الطابور عنك.`,`🏛️ *Update:* ${drv.name} has arrived at ${place} and is in the queue for you.`):R(`🏪 *تحديث:* ${drv.name} وصل إلى ${place} وعم يجيب طلبك.`,`🏪 *Update:* ${drv.name} has arrived at ${place} and is getting your items.`),"bot");
+        msgs.scrollTop=msgs.scrollHeight;
+      },7000);
+      setTimeout(()=>{
+        addBubble(isTime?R(`✅ *تحديث:* تمت المهمة! ${drv.name} في الطريق إليك.`,`✅ *Update:* Task complete! ${drv.name} is heading to you.`):R("🚗 *تحديث:* تم استلام الطلب! في الطريق إليك.","🚗 *Update:* Items picked up! On the way to you."),"bot");
+        msgs.scrollTop=msgs.scrollHeight;
+      },15000);
+      setTimeout(()=>{
+        addBubble(R("🎉 *تم التوصيل!* شكراً لاختيارك مُدبَّر.\n\nقيّم تجربتك:\n⭐ 1  ⭐⭐ 2  ⭐⭐⭐ 3  ⭐⭐⭐⭐ 4  ⭐⭐⭐⭐⭐ 5","🎉 *Delivered!* Thank you for choosing Mudaber.\n\nRate your experience:\n⭐ 1  ⭐⭐ 2  ⭐⭐⭐ 3  ⭐⭐⭐⭐ 4  ⭐⭐⭐⭐⭐ 5"),"bot");
+        msgs.scrollTop=msgs.scrollHeight;
+      },23000);
+    }else{
+      await botSay(R("من فضلك اضغط على رابط الدفع لإتمام طلبك! 😊","Please tap the payment link to complete your order! 😊"));
+    }
+
+  }else if(stage===S.CONFIRMED){
+    if(/[1-5]/.test(text)){
+      const stars=parseInt(text.match(/[1-5]/)[0]);
+      await botSay(R(`${"⭐".repeat(stars)} شكراً على تقييمك!\n\nشكراً لاختيارك *مُدبَّر* 🚗\n\nنحن هنا يومياً 7 صباحاً–2 فجراً. نشوفك قريب! 😊`,`${"⭐".repeat(stars)} Thank you!\n\nThank you for choosing *Mudaber* 🚗\n\nWe're here daily 7AM–2AM. See you next time! 😊`));
+    }else{
+      await botSay(R("شكراً! في شي ثاني أقدر أساعدك؟ 😊","Thank you! Anything else I can help with? 😊"));
+      order={};stage=S.TASK;
+    }
+  }
+  busy=false;updateBtn();
+}
+</script>
+</body>
+</html>
